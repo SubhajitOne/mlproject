@@ -7,6 +7,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts',"train.csv")
@@ -21,7 +24,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Enter the data ingestion method or component")
         try:
-            df = pd.read_csv('notebook\data\stud.csv')
+            df = pd.read_csv('notebook/data/stud.csv')
             logging.info("The dataset has been loaded in the dataframe")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
@@ -43,6 +46,9 @@ class DataIngestion:
             raise CustomException(e,sys)
         
 
-if __name__ == "__main__":
+if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+
+    data_tranformation=DataTransformation()
+    data_tranformation.initiate_data_transformation(train_data,test_data)
